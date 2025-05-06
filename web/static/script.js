@@ -96,13 +96,21 @@ document.addEventListener('DOMContentLoaded', function () {
   document.addEventListener('touchend', handleEnd);
 
 const socket = io();
-  // Recebe o comando do servidor com o ângulo
+
+// Recebe o comando do servidor com o ângulo
 socket.on('command', (data) => {
   console.log("Recebido via Socket.IO:", data);
 
-  handleStart(data.angulo);
-  handleMove(data.angulo);
-  handleEnd(data.angulo);
+  if (data != null) {
+    const angle = data.angulo;
 
+    // Atualiza visualmente o ponteiro
+    pointer.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+
+    // Atualiza o texto com o ângulo
+    angleDisplay.textContent = `Ângulo: ${Math.round(angle)}°`;
+  } else {
+    console.warn("Dado de ângulo inválido recebido:", data);
+  }
 });
 });
