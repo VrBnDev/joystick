@@ -51,8 +51,8 @@ target_include_directories(example_lwip_http_util INTERFACE
 # Add executable. Default name is the project name, version 0.1
 
 add_executable(joystick joystick.c)
-set(WIFI_SSID "aulaEmbarca")
-set(WIFI_PASSWORD "senhaEmbarca123")
+set(WIFI_SSID "embarca")
+set(WIFI_PASSWORD "embarcatech")
 target_compile_definitions(joystick PRIVATE
         WIFI_SSID=\"${WIFI_SSID}\"
         WIFI_PASSWORD=\"${WIFI_PASSWORD}\"

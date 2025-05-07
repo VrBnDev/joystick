@@ -7,22 +7,34 @@
 #include "example_http_client_util.h"
 
 // ======= CONFIGURAÇÕES ======= //
-#define HOST "192.168.210.70"  // Substitua pelo IP do servidor
+#define HOST "192.168.137.228"  // Substitua pelo IP do servidor
 #define PORT 5000
 #define INTERVALO_MS 1000
 #define LED_BLUE 12
 #define LED_RED 13
+#define CENTER_VALUE 2048
 // ============================= //
 
 float calcular_angulo(uint16_t x_raw, uint16_t y_raw) {
     const float max_adc = 4095.0;
-    float x = ((float)x_raw - (max_adc / 2)) / (max_adc / 2);
-    float y = ((float)y_raw - (max_adc / 2)) / (max_adc / 2);
+    // Calcular deslocamento em relação ao centro
+        int deltaX = x_raw - CENTER_VALUE;
+        int deltaY = y_raw - CENTER_VALUE;
 
-    float rad = atan2(y, x);
-    float deg = rad * 180.0 / M_PI + 90.0; // +90 para alinhar com o "norte"
-    if (deg < 0) deg += 360.0;
-    return deg;
+        // Ignorar ruído quando o joystick está parado
+        if (abs(deltaX) < 50 && abs(deltaY) < 50) {
+            printf("Centro\n");
+        } else {
+            // Calcular ângulo
+            float angle_rad = atan2((float)deltaY, (float)deltaX);
+            float angle_deg = angle_rad * 180.0f / M_PI;
+
+            if (angle_deg < 0.0f)
+                angle_deg += 360.0f;
+
+            return angle_deg;
+        }
+
 }
 
 int main() {
